@@ -1,0 +1,220 @@
+:root {
+    /* Colors */
+
+    /* Primary */
+
+    --Bright-Blue: hsl(220, 98%, 61%);
+    --Check-Background: linear-gradient(135deg, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+
+    /* ### Neutral */
+
+    /* ### Light Theme */
+
+    --Very-Light-Gray: hsl(0, 0%, 98%);
+    --Very-Light-Grayish-Blue: hsl(236, 33%, 92%);
+    -Dark--Light-Grayish-Blue: hsl(233, 11%, 84%);
+    --Dark-Grayish-Blue: hsl(236, 9%, 61%);
+    --Very-Dark-Grayish-Blue: hsl(235, 19%, 35%);
+
+    /* ### Dark Theme */
+
+    --Very-Dark-Blue: hsl(235, 21%, 11%);
+    --Very-Dark-De-saturated-Blue: hsl(235, 24%, 19%);
+    --Light-Grayish-Blue: hsl(234, 39%, 85%);
+    --Light-Grayish-Blue-hover: hsl(236, 33%, 92%);
+    --Dark-Grayish-Blue: hsl(234, 11%, 52%);
+    --Very-Dark-Grayish-Blue: hsl(233, 14%, 35%);
+    --Very-Dark-Grayish-Blue: hsl(237, 14%, 26%);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    line-height: 1.67;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.125rem;
+}
+
+header {
+    background-image: url('../images/bg-mobile-light.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-block: 5rem;
+}
+
+
+.container {
+    width: min(85%, 35rem);
+    margin-inline: auto;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.logo {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    letter-spacing: .75rem;
+}
+
+.input-container {
+    position: relative;
+}
+
+.input-container input[type='checkbox'] {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+}
+
+
+input[type='text'] {
+    font: inherit;
+    border: none;
+    padding: 1em;
+    padding-left: 4.875rem;
+    width: 100%;
+    border-radius: .5rem;
+}
+
+
+.content-box {
+    box-shadow: 5px 5px 10px var(--Very-Light-Grayish-Blue);
+}
+
+.hide {
+    display: none !important
+}
+
+label {
+    display: grid;
+    grid-template-columns: 3em auto;
+    align-items: center;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    border-radius: 1rem;
+    margin-top: -3em;
+}
+
+li {
+    background-color: var(--Very-Light-Gray);
+    padding: 1em 1.25em;
+    display: flex;
+    align-items: center;
+    gap: 2rem
+}
+
+li:first-of-type {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+li:last-of-type {
+    border-bottom-left-radius: 5px;
+    border-end-end-radius: 5px;
+}
+
+li+li {
+    border-top: 1.5px solid var(--Very-Light-Grayish-Blue);
+}
+
+
+
+button {
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 2rem;
+    line-height: 18px;
+    font-weight: 300;
+    color: var(--Dark-Grayish-Blue);
+    margin-left: auto;
+
+}
+
+
+.list-controls {
+    display: flex;
+    justify-content: space-between;
+}
+
+input[type='checkbox'] {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background-image: var(--Check-Background);
+    place-items: center;
+    display: grid;
+}
+
+input[type='checkbox']:checked::before {
+    content: '';
+    width: .5rem;
+    transform: rotate(312deg);
+    height: .25em;
+    border-bottom: 2px solid white;
+    border-left: 2px solid white;
+}
+
+input[type='checkbox']:checked~span {
+    text-decoration: line-through 2px;
+}
+
+.list-controls {
+    font-size: 1rem;
+}
+
+.list-controls button {
+    border: none;
+    outline: none;
+    background: none;
+    font: inherit;
+    font-weight: bold;
+    color: var(--Light-Grayish-Blue);
+    cursor: pointer;
+}
+
+.list-controls .left-items,
+.list-controls #clear-completed {
+    font-size: .875rem;
+    color: var(--Dark-Grayish-Blue);
+    font-weight: normal;
+}
+
+.list-controls button:hover {
+    color: var(--Dark-Grayish-Blue);
+}
+
+.list-controls #show-all {
+    color: var(--Bright-Blue)
+}
+
+.drag {
+    text-align: center;
+    margin-block: 3rem;
+
+    color: var(--Dark-Grayish-Blue);
+}
+
+@media screen and (min-width:23.4375rem) {
+    header {
+        background-image: url('../images/bg-desktop-light.jpg');
+    }
+}
