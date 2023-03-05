@@ -13,17 +13,17 @@ window.onload = publishList;
 function publishList() {
     let todoList = JSON.parse(localStorage.getItem("tasks")) || [];
 
-    // console.log('%c initial list Items', 'color:red', todoList, itemsLeft)
-
     const listItems = document.getElementById('list-items');
     todoList.forEach(item => publishItem(item));
 
     let itemsLeft = 0;
+    let completed = 0;
 
     for (const item of todoList) {
-        item.isCompleted ? itemsLeft : itemsLeft++
+        item.isCompleted ? completed++ : itemsLeft++
     }
     document.getElementById('tasks-left').innerText = itemsLeft;
+    document.getElementById('completed-tasks').innerText = completed;
 }
 
 
@@ -60,7 +60,6 @@ function addNewItem(e) {
 
 
     todoList = Array.from([...JSON.parse(localStorage.getItem('tasks')) || [], newItem])
-    console.log('%c current list', 'color:red', todoList)
     localStorage.setItem('tasks', JSON.stringify(todoList));
     inputField.value = '';
     // publish new item
@@ -103,14 +102,14 @@ function toggleIsCompleted(elem) {
 
     localStorage.setItem('tasks', JSON.stringify(todoList))
 
-    console.log(todoList)
 
-    let itemsLeft = 0;
+    let itemsLeft = 0, completed = 0;
 
     for (const item of todoList) {
-        item.isCompleted ? itemsLeft : itemsLeft++
+        item.isCompleted ? completed++ : itemsLeft++
     }
     document.getElementById('tasks-left').innerText = itemsLeft;
+    document.getElementById('completed-tasks').innerText = completed
 }
 
 
@@ -124,7 +123,9 @@ function clearCompleted() {
     todoList = todoList.filter(item => !item.isCompleted);
 
     localStorage.setItem('tasks', JSON.stringify(todoList));
-    completedListItems.forEach(item => item.remove())
+    completedListItems.forEach(item => item.remove());
+    document.getElementById('completed-tasks').innerText = 0;
+
 }
 
 
@@ -138,8 +139,6 @@ const deleteItem = elem => {
     todoList.forEach((item, index) => {
         if (item.task == targetElem.innerText) {
             todoList.splice(index, 1);
-            console.log(todoList)
-
         }
     });
 
@@ -148,18 +147,19 @@ const deleteItem = elem => {
     elem.parentElement.remove();
 
     let itemsLeft = 0;
+    let completed = 0;
 
     for (const item of todoList) {
-        item.isCompleted ? itemsLeft : itemsLeft++
+        item.isCompleted ? completed++ : itemsLeft++
     }
     document.getElementById('tasks-left').innerText = itemsLeft;
+    document.getElementById('completed-tasks').innerText = completed
 }
 
 
 // show completed items
 function showCompleted() {
     const listItems = document.querySelectorAll('.list-item');
-    console.log(listItems)
     for (const item of listItems) {
         if (item.className.includes('completed')) {
             item.classList.remove('hide')
@@ -193,4 +193,29 @@ function showAll() {
         item.classList.remove('hide')
     }
 }
+
+
+// edit tasks
+const listItems = document.getElementById('list-items').addEventListener('click', editTasks);
+function editTasks(e) {
+    if (e.target.isContentEditable) {
+        const currentTask = e.target.innerText;
+        e.target.addEventListener('blur', editCurrentTask);
+
+        // edit current task
+        function editCurrentTask() {
+            console.log(this)
+            const listItems = Array.from(JSON.parse(localStorage.getItem('tasks')));
+            for (const item of listItems) {
+                if (item.task == this.innerText) {
+                    alert('This task is already exist');
+                    this.click();
+                }
+            }
+
+        }
+    }
+}
+
+
 // localStorage.clear()

@@ -206,6 +206,17 @@ input[type='checkbox']:checked~span {
     color: var(--Bright-Blue)
 }
 
+
+#completed {
+    position:relative
+}
+/* 
+.badge {
+    position:absolute;
+    top:0;
+    right:0;
+} */
+
 .drag {
     text-align: center;
     margin-block: 3rem;
