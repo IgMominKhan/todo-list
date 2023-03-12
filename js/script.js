@@ -227,8 +227,10 @@ function editTask(elem) {
       }
 
       localStorage.setItem("tasks", JSON.stringify(listItems));
-    
-  
 }
+
+
+// drag and drop features
+
 
 // localStorage.clear()
