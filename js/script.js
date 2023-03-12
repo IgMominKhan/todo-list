@@ -11,211 +11,224 @@
 window.onload = publishList;
 
 function publishList() {
-    let todoList = JSON.parse(localStorage.getItem("tasks")) || [];
+  let todoList = JSON.parse(localStorage.getItem("tasks")) || [];
 
-    const listItems = document.getElementById('list-items');
-    todoList.forEach(item => publishItem(item));
+  const listItems = document.getElementById("list-items");
+  todoList.forEach((item) => publishItem(item));
 
-    let itemsLeft = 0;
-    let completed = 0;
+  let itemsLeft = 0;
+  let completed = 0;
 
-    for (const item of todoList) {
-        item.isCompleted ? completed++ : itemsLeft++
-    }
-    document.getElementById('tasks-left').innerText = itemsLeft;
-    document.getElementById('completed-tasks').innerText = completed;
+  for (const item of todoList) {
+    item.isCompleted ? completed++ : itemsLeft++;
+  }
+  document.getElementById("tasks-left").innerText = itemsLeft;
+  document.getElementById("completed-tasks").innerText = completed;
 }
-
-
 
 // add new items on form submit
 
-const form = document.querySelector('form').addEventListener('submit', addNewItem)
+const form = document
+  .querySelector("form")
+  .addEventListener("submit", addNewItem);
 
 function addNewItem(e) {
-    e.preventDefault();
-    let countItem = 0;
-    const inputField = document.getElementById('input-field')
-    let userInput = inputField.value;
-    let todoList = JSON.parse(localStorage.getItem('tasks')) || [];
+  e.preventDefault();
+  let countItem = 0;
+  const inputField = document.getElementById("input-field");
+  let userInput = inputField.value;
+  let todoList = JSON.parse(localStorage.getItem("tasks")) || [];
 
-    // validate user input
-    if (userInput.trim() == '') { alert('Please Enter a task'); inputField.value = ''; return }
+  // validate user input
+  if (userInput.trim() == "") {
+    alert("Please Enter a task");
+    inputField.value = "";
+    return;
+  }
 
-    // check is exist
+  // check is exist
 
-    for (const item of todoList) {
-        if (item.task == userInput.trim()) {
-            alert('This task is already exist');
-            inputField.value = '';
-            return;
-        }
+  for (const item of todoList) {
+    if (item.task == userInput.trim()) {
+      alert("This task is already exist");
+      inputField.value = "";
+      return;
     }
+  }
 
-    const newItem = {
-        task: inputField.value,
-        isCompleted: false
-    }
+  const newItem = {
+    task: inputField.value,
+    isCompleted: false,
+  };
 
+  todoList = Array.from([
+    ...(JSON.parse(localStorage.getItem("tasks")) || []),
+    newItem,
+  ]);
+  localStorage.setItem("tasks", JSON.stringify(todoList));
+  inputField.value = "";
+  // publish new item
+  publishItem(newItem);
 
+  let itemsLeft = 0;
 
-    todoList = Array.from([...JSON.parse(localStorage.getItem('tasks')) || [], newItem])
-    localStorage.setItem('tasks', JSON.stringify(todoList));
-    inputField.value = '';
-    // publish new item
-    publishItem(newItem);
-
-    let itemsLeft = 0;
-
-    for (const item of todoList) {
-        item.isCompleted ? itemsLeft : itemsLeft++
-    }
-    document.getElementById('tasks-left').innerText = itemsLeft;
+  for (const item of todoList) {
+    item.isCompleted ? itemsLeft : itemsLeft++;
+  }
+  document.getElementById("tasks-left").innerText = itemsLeft;
 }
 
 // publish item
 function publishItem(item) {
-    const listItems = document.getElementById('list-items');
-    const li = document.createElement('li');
+  const listItems = document.getElementById("list-items");
+  const li = document.createElement("li");
 
-    li.innerHTML = `<input type='checkbox' ${item.isCompleted ? 'checked' : ''} onclick='toggleIsCompleted(this)' > <span contenteditable>${item.task}</span><button onclick='deleteItem(this)'>&times;</button>`
-    li.setAttribute('class', 'active list-item');
-    listItems.insertBefore(li, listItems.children[0])
+  li.innerHTML = `<input type='checkbox' ${
+    item.isCompleted ? "checked" : ""
+  } onclick='toggleIsCompleted(this)' > <input value=${
+    item.task
+  }  onfocus="getCurrentTask(this)" onblur='editTask(this)' '/><button onclick='deleteItem(this)'>&times;</button>`;
+  li.setAttribute("class", "active list-item");
+  listItems.insertBefore(li, listItems.children[0]);
 
-    if (item.isCompleted) {
-        li.className = 'list-item completed';
-    }
+  if (item.isCompleted) {
+    li.className = "list-item completed";
+  }
 }
-
 
 // handle is completed
 function toggleIsCompleted(elem) {
-    const todoList = Array.from(JSON.parse(localStorage.getItem('tasks')));
+  const todoList = Array.from(JSON.parse(localStorage.getItem("tasks")));
 
-    todoList.forEach(item => {
-        if (item.task === elem.nextElementSibling.innerText) {
-            item.isCompleted = !item.isCompleted;
-            elem.parentElement.classList.toggle('completed');
-            elem.parentElement.classList.toggle('active')
-        }
-    })
-
-    localStorage.setItem('tasks', JSON.stringify(todoList))
-
-
-    let itemsLeft = 0, completed = 0;
-
-    for (const item of todoList) {
-        item.isCompleted ? completed++ : itemsLeft++
+  todoList.forEach((item) => {
+    if (item.task === elem.nextElementSibling.value) {
+      item.isCompleted = !item.isCompleted;
+      elem.parentElement.classList.toggle("completed");
+      elem.parentElement.classList.toggle("active");
     }
-    document.getElementById('tasks-left').innerText = itemsLeft;
-    document.getElementById('completed-tasks').innerText = completed
+  });
+
+  localStorage.setItem("tasks", JSON.stringify(todoList));
+
+  let itemsLeft = 0,
+    completed = 0;
+
+  for (const item of todoList) {
+    item.isCompleted ? completed++ : itemsLeft++;
+  }
+  document.getElementById("tasks-left").innerText = itemsLeft;
+  document.getElementById("completed-tasks").innerText = completed;
 }
 
-
-const clearCompletedBtn = document.getElementById('clear-completed').addEventListener('click', clearCompleted);
+const clearCompletedBtn = document
+  .getElementById("clear-completed")
+  .addEventListener("click", clearCompleted);
 
 // clear completed
 function clearCompleted() {
-    let todoList = Array.from(JSON.parse(localStorage.getItem('tasks')));
-    const completedListItems = document.querySelectorAll('.completed');
+  let todoList = Array.from(JSON.parse(localStorage.getItem("tasks")));
+  const completedListItems = document.querySelectorAll(".completed");
 
-    todoList = todoList.filter(item => !item.isCompleted);
+  todoList = todoList.filter((item) => !item.isCompleted);
 
-    localStorage.setItem('tasks', JSON.stringify(todoList));
-    completedListItems.forEach(item => item.remove());
-    document.getElementById('completed-tasks').innerText = 0;
-
+  localStorage.setItem("tasks", JSON.stringify(todoList));
+  completedListItems.forEach((item) => item.remove());
+  document.getElementById("completed-tasks").innerText = 0;
 }
-
 
 // delete Item
 
-const deleteItem = elem => {
-    todoList = Array.from(JSON.parse(localStorage.getItem('tasks')));
-    const targetElem = elem.parentElement.children[1];
+const deleteItem = (elem) => {
+  todoList = Array.from(JSON.parse(localStorage.getItem("tasks")));
+  const targetElem = elem.parentElement.children[1];
 
-
-    todoList.forEach((item, index) => {
-        if (item.task == targetElem.innerText) {
-            todoList.splice(index, 1);
-        }
-    });
-
-
-    localStorage.setItem('tasks', JSON.stringify(todoList));
-    elem.parentElement.remove();
-
-    let itemsLeft = 0;
-    let completed = 0;
-
-    for (const item of todoList) {
-        item.isCompleted ? completed++ : itemsLeft++
+  todoList.forEach((item, index) => {
+    if (item.task == targetElem.value) {
+      todoList.splice(index, 1);
     }
-    document.getElementById('tasks-left').innerText = itemsLeft;
-    document.getElementById('completed-tasks').innerText = completed
-}
+  });
 
+  localStorage.setItem("tasks", JSON.stringify(todoList));
+  elem.parentElement.remove();
+
+  let itemsLeft = 0;
+  let completed = 0;
+
+  for (const item of todoList) {
+    item.isCompleted ? completed++ : itemsLeft++;
+  }
+  document.getElementById("tasks-left").innerText = itemsLeft;
+  document.getElementById("completed-tasks").innerText = completed;
+};
 
 // show completed items
 function showCompleted() {
-    const listItems = document.querySelectorAll('.list-item');
-    for (const item of listItems) {
-        if (item.className.includes('completed')) {
-            item.classList.remove('hide')
-            continue;
-        } else {
-            item.classList.add('hide')
-        }
+  const listItems = document.querySelectorAll(".list-item");
+  for (const item of listItems) {
+    if (item.className.includes("completed")) {
+      item.classList.remove("hide");
+      continue;
+    } else {
+      item.classList.add("hide");
     }
+  }
 }
-
 
 // show active item
 
 function showActive() {
-    const listItems = document.querySelectorAll('.list-item');
-    for (const item of listItems) {
-        if (item.className.includes('active')) {
-            item.classList.remove('hide')
-            continue
-        } else {
-            item.classList.add('hide')
-        }
+  const listItems = document.querySelectorAll(".list-item");
+  for (const item of listItems) {
+    if (item.className.includes("active")) {
+      item.classList.remove("hide");
+      continue;
+    } else {
+      item.classList.add("hide");
     }
+  }
 }
 
 //show all items
 
 function showAll() {
-    const listItems = document.querySelectorAll('.list-item');
-    for (const item of listItems) {
-        item.classList.remove('hide')
-    }
+  const listItems = document.querySelectorAll(".list-item");
+  for (const item of listItems) {
+    item.classList.remove("hide");
+  }
 }
 
+
+let currentTask;
+
+// get current task
+
+function getCurrentTask(elem) {
+  currentTask = elem.value;
+}
 
 // edit tasks
-const listItems = document.getElementById('list-items').addEventListener('click', editTasks);
-function editTasks(e) {
-    if (e.target.isContentEditable) {
-        const currentTask = e.target.innerText;
-        e.target.addEventListener('blur', editCurrentTask);
 
-        // edit current task
-        function editCurrentTask() {
-            console.log(this)
-            const listItems = Array.from(JSON.parse(localStorage.getItem('tasks')));
-            for (const item of listItems) {
-                if (item.task == this.innerText) {
-                    alert('This task is already exist');
-                    this.click();
-                }
-            }
-
+function editTask(elem) {
+  
+    
+      const listItems = Array.from(JSON.parse(localStorage.getItem("tasks")));
+      if (elem.value.trim() === "") {
+        alert("Please, Enter a task");
+        elem.value = currentTask;
+        return;
+      }
+      // is exist
+      for (const item of listItems) {
+        if (item.task.trim() === elem.value.trim()) {
+          alert("This task is already exist");
+          elem.value = currentTask;
+          return;
         }
-    }
-}
+      }
 
+      localStorage.setItem("tasks", JSON.stringify(listItems));
+    
+  
+}
 
 // localStorage.clear()
